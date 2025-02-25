@@ -10,18 +10,18 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="stylesheet" href="style.css">
   <style>
-      .dashboard-main{position: relative;}
-      .dashboard-sidebar{position: fixed;left: 0;width: 280px;z-index: 1;overflow-y: scroll;padding: 1rem;background: var(--color-accent);min-height: 100vh;height: 100%;box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .12);}
-      .dashboard-content {width: 100%;padding-top: 2rem;padding-bottom: 2rem;padding-right: 2rem;padding-left: 2rem;right: 0;position: absolute;}
+      .admin{display: grid;grid-template-columns: 280px 1fr;height: 100dvh;}
+      .admin-sidebar{background: var(--color-accent);height: 100dvh;overflow-y: auto;}
+      .admin-sidebar .menubar{display: none;}
+      .admin-main {padding: 2rem;height: 100dvh;overflow-y: auto;}
       .dashboard-content__title {font-size: var(--h4-font-size);margin-bottom: 2rem;}
-      .dashboard-sidebar .menubar{display: none;}
-      .dashboard-sidebar.hide {width: 70px;padding: 1rem;}
-      .dashboard-sidebar.hide .dashboard-sidebar__menu{display: none;}
-      .dashboard-sidebar.hide + .dashboard-content{width: calc(100% - 70px);z-index: -1;}
-      .sidebar-header{margin-bottom: 1.5rem;}
-      .close{display: block;position: absolute;top: 10px;right: 10px;}
-      .dashboard-sidebar.hide .menu{display: inline-block;position: absolute;}
-      .dashboard-sidebar.hide .close{display: none;}
+      .admin-sidebar .menubar{display: none;}
+      .menubar{display: inline-block; position: absolute; right: 30px; top: 10px;}
+      .admin:has(.admin-sidebar.hide){ grid-template-columns: 0px 1fr;}
+      .sidebar-header{padding: 1rem;position: sticky;top: 0;background-color: var(--color-white);box-shadow: var(--box-shadow-primary);}
+      .admin-sidebar .close{display: none;display: inline-block;position: absolute;top: 10px;right: 30px;}
+      .sidebar-header__menu { padding: 1rem; }
+      .admin-sidebar.hide .close{display: none;}
       .menu svg{width: 30px;height: 30px;}
       .sidebar-header__logo{width: 150px;}
       .sidebar-menu__item{padding: 1rem;display: flex;align-items: center;gap: 18px;}
@@ -44,13 +44,18 @@
       .dashboard-content__table-img {display: flex;align-items: center;gap: 1rem;}    
       .dashboard-content__table-img img{width: 45px;height: 45px;border-radius: 50%;}
       .dashboard-content__table tr th{border-bottom: 1px solid #dedede;text-align: start;}
-      .dashboard-content__table td,th{padding: 1.5rem;}
+      .dashboard-content__table td,th{padding: .5rem;}
       .dashboard-content__table th{color:#607080;}
       .table__content{margin-left: 1rem;color: #607080;font-weight: 700;}
-      .table__content-description{color: #607080;}
+      .table__content-description{color: #607080;font-size: var(--font-size-small);}
+      .dashboard-content__table-title{font-size: var(--font-size-small);}
       .dashboard__sider-img{width: 50px;height: 50px;border-radius: 50%;}
       .dashboard__sider-card {display: flex;gap: 2rem;align-items: center;padding: 1rem;margin-bottom: 1rem;background: var(--color-accent);border-radius: 6px;box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .12);}
       .dashboard-content__graph-table,.dashboard-content__graph-feature{width: 100%;}
+      @media(min-width:576px){
+        .table__content-description{font-size: var(--font-size-default);}
+        .dashboard-content__table-title{font-size: var(--font-size-default);}
+      }
       @media(min-width:768px){
         .dashboard-content-card{width: calc(50% - 4rem / 4);}
         .dashboard-content__graph-feature {width: calc(33.33% - 2rem / 2);}
@@ -58,8 +63,6 @@
       }
       @media(min-width:992px){
       .dashboard-card__item{display: flex;gap: 2rem;}
-      .dashboard-sidebar.hide{width: 5%;}
-      .dashboard-sidebar.hide + .dashboard-content{width: calc(100% - 5%);}
       .dashboard-content__left-card{width: calc(75% - 2rem/2);}
       .dashboard__right-card{width: calc(25% - 2rem/2);display: flex;flex-direction: column;}
       .dashboard-content-card{width: calc(25% - 6rem / 4);}
@@ -67,15 +70,14 @@
   </style>
 </head>
 <body>
-  <section class="dashboard">
-      <div class="dashboard-main">
-      <aside class="dashboard-sidebar hide">
-        <a href="#" class="menu menubar"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M4 6H20M4 12H20M4 18H20" stroke="#7c8db5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg></a>
-        <div class="dashboard-sidebar__menu">
+  <div class="sidebar-header">
+    <img src="images/blueoshan-logo.svg" class="sidebar-header__logo" alt="logo">
+    <a href="#" class="menu menubar"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M4 6H20M4 12H20M4 18H20" stroke="#7c8db5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg></a>
+</div>
+      <div class="admin">
+      <aside class="admin-sidebar">
+        <div class="admin-sidebar__menu">
           <a href="#" class="menu close"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M14.5 9.50002L9.5 14.5M9.49998 9.5L14.5 14.5" stroke="#7c8db5" stroke-width="1.5" stroke-linecap="round"></path> <path d="M7 3.33782C8.47087 2.48697 10.1786 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 10.1786 2.48697 8.47087 3.33782 7" stroke="#7c8db5" stroke-width="1.5" stroke-linecap="round"></path> </g></svg></a> 
-        <div class="sidebar-header">
-              <img src="images/blueoshan-logo.svg" class="sidebar-header__logo" alt="logo">
-          </div>
           <div class="sidebar-header__menu">
               <ul class="sidebar-header__menu-items">
                   <li class="sidebar-menu--head">Menu</li>
@@ -138,7 +140,7 @@
           </div>
         </div>
       </aside>
-      <div class="dashboard-content">
+      <main class="admin-main">
           <h3 class="dashboard-content__title">Profile Statistics</h3>
           <div class="dashboard-card__item">
               <div class="dashboard-content__left-card">
@@ -182,75 +184,6 @@
                 </div>
                 <h4 class="dashboard-content__card-title">Profile Visit</h4>
                 <canvas id="graph" class="dashboard-content__graph"></canvas>
-                <div class="dashboard-content__graph-data">
-                  <div class="dashboard-content__graph-feature">
-                    <h4 class="dashboard-content__card-title">Profile Visit</h4>
-                    <img src="images/graph.png" alt="graph" class="dashboard-feature">
-                  </div>
-                  <div class="dashboard-content__graph-table">
-                    <h4 class="dashboard-content__card-title">Notice Board</h4>
-                    <table class="dashboard-content__table">
-                      <thead>
-                          <tr>
-                              <th>Name</th>
-                              <th>Comment</th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          <tr>
-                              <td>
-                                  <div class="dashboard-content__table-img">
-                                      <img src="images/tableimg.jpg">
-                                      <p class="dashboard-content__table-title">Si Cantik</p>
-                                  </div>
-                              </td>
-                              <td>
-                                  <p class="table__content-description">Congratulations on your graduation!</p>
-                              </td>
-                          </tr>
-                          <tr>
-                              <td>
-                                <div class="dashboard-content__table-img">
-                                  <img src="images/tableimg1.jpg">
-                                  <p class="dashboard-content__table-title">Si Cantik</p>
-                              </div>
-                              </td>
-                              <td>
-                                  <p class="table__content-description">Wow amazing design! Can you make another
-                                      tutorial for
-                                      this design?</p>
-                              </td>
-                          </tr>
-                          <tr>
-                              <td>
-                                <div class="dashboard-content__table-img">
-                                  <img src="images/tableimg.jpg">
-                                  <p class="dashboard-content__table-title">Si Cantik</p>
-                              </div>
-                              </td>
-                              <td>
-                                  <p class="table__content-description">Wow amazing design! Can you make another
-                                      tutorial for
-                                      this design?</p>
-                              </td>
-                          </tr>
-                          <tr>
-                              <td>
-                                <div class="dashboard-content__table-img">
-                                  <img src="images/tableimg1.jpg">
-                                  <p class="dashboard-content__table-title">Si Cantik</p>
-                              </div>
-                              </td>
-                              <td>
-                                  <p class="table__content-description">Wow amazing design! Can you make another
-                                      tutorial for
-                                      this design?</p>
-                              </td>
-                          </tr>
-                      </tbody>
-                  </table>
-                  </div>
-                </div>
               </div>
             <div class="dashboard__right-card">
                   <div class="dashboard__sider-card">
@@ -298,12 +231,80 @@
                   </div>  
             </div>
           </div>
-      </div>
+          <div class="dashboard-content__graph-data">
+            <div class="dashboard-content__graph-feature">
+              <h4 class="dashboard-content__card-title">Profile Visit</h4>
+              <canvas id="graphData"></canvas>
+            </div>
+            <div class="dashboard-content__graph-table">
+              <h4 class="dashboard-content__card-title">Notice Board</h4>
+              <table class="dashboard-content__table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Comment</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="dashboard-content__table-img">
+                                <img src="images/tableimg.jpg">
+                                <p class="dashboard-content__table-title">Si Cantik</p>
+                            </div>
+                        </td>
+                        <td>
+                            <p class="table__content-description">Congratulations on your graduation!</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                          <div class="dashboard-content__table-img">
+                            <img src="images/tableimg1.jpg">
+                            <p class="dashboard-content__table-title">Si Cantik</p>
+                        </div>
+                        </td>
+                        <td>
+                            <p class="table__content-description">Wow amazing design! Can you make another
+                                tutorial for
+                                this design?</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                          <div class="dashboard-content__table-img">
+                            <img src="images/tableimg.jpg">
+                            <p class="dashboard-content__table-title">Si Cantik</p>
+                        </div>
+                        </td>
+                        <td>
+                            <p class="table__content-description">Wow amazing design! Can you make another
+                                tutorial for
+                                this design?</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                          <div class="dashboard-content__table-img">
+                            <img src="images/tableimg1.jpg">
+                            <p class="dashboard-content__table-title">Si Cantik</p>
+                        </div>
+                        </td>
+                        <td>
+                            <p class="table__content-description">Wow amazing design! Can you make another
+                                tutorial for
+                                this design?</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+          </div>
+      </main>
   </div>
-  </section>
 <script>
 document.addEventListener("DOMContentLoaded",function(){
-  const sideBar = document.querySelector(".dashboard-sidebar");
+  const sideBar = document.querySelector(".admin-sidebar");
   const menu = document.querySelector(".menu");
   const close = document.querySelector(".close")
   menu.addEventListener("click",function(){
@@ -338,7 +339,6 @@ document.addEventListener("DOMContentLoaded",function(){
                     max: 32,
                     title: {
                         display: true,
-                        // text: 'Attendance Percentage'
                     }, grid: {
                         display: true 
                   }
@@ -346,7 +346,6 @@ document.addEventListener("DOMContentLoaded",function(){
                 x: {
                     title: {
                         display: true,
-                        // text: 'Months'
                     },
                     grid: {
                         display: false 
@@ -355,6 +354,55 @@ document.addEventListener("DOMContentLoaded",function(){
             }
         }
     });
+</script>
+<script>
+  const ctxg = document.getElementById('graphData').getContext('2d');
+
+  const data = {
+      labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],  
+      datasets: [
+          {
+              label: "Europe",
+              data: [850, 852, 855, 858, 860, 862], 
+              borderColor: "blue",
+              fill: true,
+              tension: 0.3 
+          },
+          {
+              label: "America",
+              data: [360, 380, 370, 390, 365, 375],
+              borderColor: "green",
+              fill: true,
+              tension: 0.4
+          },
+          {
+              label: "Indonesia",
+              data: [1000, 1025, 1010, 1030, 1015, 1025], 
+              borderColor: "red",
+              fill: true,
+              tension: 0.4
+          }
+      ]
+  };
+
+  const config = {
+      type: 'line',
+      data: data,
+      options: {
+          responsive: true,
+          plugins: {
+              legend: {
+                  display: false 
+              }
+          },
+          scales: {
+              x: { display: false },
+              y: { display: false } 
+          }
+      }
+  };
+
+  new Chart(ctxg, config);
 </script>
 </body>
 </html>

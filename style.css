@@ -78,7 +78,7 @@ body{  font-family: "Inter", sans-serif;font-style: normal;}
     --font-weight-400: 400;
     --font-weight-500: 500;
     --font-weight-600: 600;
-    --box-shadow-primary: 0px 7px 16px 0px #00000017, 0px 29px 29px 0px #00000014, 0px 66px 39px 0px #0000000D, 0px 117px 47px 0px #00000003, 0px 183px 51px 0px #00000000;
+    --box-shadow-primary: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .12);
     --border-radius-primary: 20px;
 }
 html {-webkit-text-size-adjust: 100%;-webkit-tap-highlight-color: transparent}
