@@ -1,0 +1,176 @@
+/*
+Author       : Afrin Fathima
+Theme Name   : Admin Template
+Version      : 1.0
+*/
+
+/*==================================
+[Table of CSS]
+1. Import Font
+2. Reset
+3. Preset
+4. General
+5. Typography
+6. Grid System
+7. Layout
+8. Buttons
+9. Placeholder
+
+6. Colors
+8. Form
+9. Header
+10. Mobile Menu
+11. Footer
+12. Auth
+13. Admin
+14. Table
+15. Cards
+16. Sidebar
+17. Tab
+18. Form page navigation
+19. Image preview/placeholder
+20. Radio
+21. Checkbox
+22. Search
+23. Spacing
+==================================*/
+@font-face {
+    font-family: "Inter";
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+    src: url("./fonts/regular.woff2") format("woff2"), url("./fonts/regular.woff") format("woff");
+  }
+  @font-face {
+    font-family: "Inter";
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+    src: url("./fonts/500.woff2") format("woff2"), url("./fonts/500.woff") format("woff");
+  }
+  @font-face {
+    font-family: "Inter";
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+    src: url("./fonts/600.woff2") format("woff2"), url("./fonts/600.woff") format("woff");
+  }
+html{box-sizing: border-box;font-size: 16px;}
+*, *:before, *:after{box-sizing: border-box;margin: 0;padding: 0;}
+img{width: 100%;height: auto;}
+ul,ol{list-style: none;}
+a{text-decoration: none;}
+body{  font-family: "Inter", sans-serif;font-style: normal;}
+:root{
+    --color-primary: #25396f;
+    --color-secondary: #7c8db5;
+    --color-accent: #f0f0f0;
+    --color-white: #ffffff;
+    --font-color-white: #ffffff;
+    --font-color-dark: #000000;
+    --font-family-primary: 'Inter', sans-serif;
+    --font-size-default: 16px;
+    --font-size-small: 14px;
+    --font-size-caption: 12px;
+    --line-height-default: 26px;
+    --line-height-small: 22px;
+    --line-height-caption: 20px;
+    --font-weight-400: 400;
+    --font-weight-500: 500;
+    --font-weight-600: 600;
+    --box-shadow-primary: 0px 7px 16px 0px #00000017, 0px 29px 29px 0px #00000014, 0px 66px 39px 0px #0000000D, 0px 117px 47px 0px #00000003, 0px 183px 51px 0px #00000000;
+    --border-radius-primary: 20px;
+}
+html {-webkit-text-size-adjust: 100%;-webkit-tap-highlight-color: transparent}
+body{
+    color: var(--color-primary);
+    font-family: var(--font-family-primary);
+    font-size: var(--font-size-default);
+    font-weight: var(--font-weight-400);
+    line-height: var(--line-height-default);
+    letter-spacing: var(--letter-spacing-default-400);
+    --h1-font-size: 38px;
+    --h2-font-size: 34px;
+    --h3-font-size: 30px;
+    --h4-font-size: 26px;
+    --h5-font-size: 22px;
+    --h6-font-size: 18px;
+    --h1-line-height: 46px;
+    --h2-line-height: 38px;
+    --h3-line-height: 34px;
+    --h4-line-height: 26px;
+    --h5-line-height: 22px;
+    --h6-line-height: 18px;
+    --container-width: 	100%;
+}
+@media(min-width: 576px) {
+    body {
+        --container-width:540px;
+        --container-width-80: 540px
+    }
+}
+@media(min-width: 768px) {
+    body {
+        --container-width:720px;
+        --container-width-80: 720px
+    }
+}
+@media(min-width:768px) and (max-width:1199.98px){
+    body{
+        --h1-font-size: 48px;
+        --h2-font-size: 40px;
+        --h3-font-size: 32px;
+        --h4-font-size: 28px;
+        --h5-font-size: 24px;
+        --h6-font-size: 20px;
+        --h1-line-height: 58px;
+        --h2-line-height: 50px;
+        --h3-line-height: 40px;
+        --h4-line-height: 36px;
+        --h5-line-height: 32px;
+        --h6-line-height: 30px;
+    }
+}
+@media(min-width: 992px) {
+    body {
+        --container-width:960px;
+        --container-width-80: 960px
+    }
+}
+@media(min-width:1200px){
+    body{
+        --h1-font-size: 60px;
+        --h2-font-size: 48px;
+        --h3-font-size: 40px;
+        --h4-font-size: 32px;
+        --h1-line-height: 72px;
+        --h2-line-height: 58px;
+        --h3-line-height: 50px;
+        --h4-line-height: 40px;
+        --h5-line-height: 32px;
+        --h6-line-height: 30px;
+        --container-width: 1140px;
+        --container-width-80: 1184px;
+        --section-padding: 80px
+    }
+}
+@media(min-width:1400px){
+    body{
+        --container-width: 	1320px;
+    }
+}
+@media(min-width:1520px){
+    body{
+        --container-width: 1462px;
+    }
+}
+
+h1,.h1{font-size: var(--h1-font-size);line-height: var(--h1-line-height);letter-spacing: var(--h1-letter-spacing-600);}
+h2,.h2{font-size: var(--h2-font-size);line-height: var(--h2-line-height);letter-spacing: var(--h2-letter-spacing-600);}
+h3,.h3{font-size: var(--h3-font-size);line-height: var(--h3-line-height);letter-spacing: var(--h3-letter-spacing-600);}
+h4,.h4{font-size: var(--h4-font-size);line-height: var(--h4-line-height);letter-spacing: var(--h4-letter-spacing-600);}
+h5,.h5{font-size: var(--h5-font-size);line-height: var(--h5-line-height);letter-spacing: var(--h5-letter-spacing-600);}
+h6,.h6{font-size: var(--h6-font-size);line-height: var(--h6-line-height);letter-spacing: var(--h6-letter-spacing-600);}
+a{text-decoration: none;color: var(--font-color-primary);}
+.container{max-width: var(--container-width);width: 100%;margin-left: auto;margin-right: auto;padding-left: 1rem;padding-right: 1rem;}
+.section-padding{padding-top:var(--section-padding);padding-bottom:var(--section-padding);}

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Theme</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <style>
+      .dashboard-main{position: relative;}
+      .dashboard-sidebar{position: fixed;left: 0;width: 280px;z-index: 1;overflow-y: scroll;padding: 1rem;background: var(--color-accent);min-height: 100vh;height: 100%;box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .12);}
+      .dashboard-content {width: 100%;padding-top: 2rem;padding-bottom: 2rem;padding-right: 2rem;padding-left: 2rem;right: 0;position: absolute;}
+      .dashboard-content__title {font-size: var(--h4-font-size);margin-bottom: 2rem;}
+      .dashboard-sidebar .menubar{display: none;}
+      .dashboard-sidebar.hide {width: 70px;padding: 1rem;}
+      .dashboard-sidebar.hide .dashboard-sidebar__menu{display: none;}
+      .dashboard-sidebar.hide + .dashboard-content{width: calc(100% - 70px);z-index: -1;}
+      .sidebar-header{margin-bottom: 1.5rem;}
+      .close{display: block;position: absolute;top: 10px;right: 10px;}
+      .dashboard-sidebar.hide .menu{display: inline-block;position: absolute;}
+      .dashboard-sidebar.hide .close{display: none;}
+      .menu svg{width: 30px;height: 30px;}
+      .sidebar-header__logo{width: 150px;}
+      .sidebar-menu__item{padding: 1rem;display: flex;align-items: center;gap: 18px;}
+      .sidebar-menu__item-link{font-size: var(--font-size-default);font-weight: 600;color: var(--color-primary);display: inline-block;transition: .3s ease;}
+      .sidebar-menu--head{padding: 1rem;font-size: var(--font-size-default);font-weight: 600;color: var(--font-color-dark);}
+      .sidebar-menu__item svg{fill: var(--color-secondary);width: 22px;height: 22px;}
+      .sidebar-menu__item:hover{background-color: var(--color-primary);border-radius: 8px;}
+      .sidebar-menu__item:hover .sidebar-menu__item-link{color: var(--color-white);}
+      .sidebar-menu__item:hover svg{fill: var(--color-white);}
+      .dashboard-content-cards {display: flex;gap: 2rem;margin-bottom: 2rem;flex-wrap: wrap;}
+      .dashboard-content-card {background-color: var(--color-accent);box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .12);padding: 1rem;width: 100%;display: flex;gap: 1rem;align-items: center;flex-wrap: wrap;border-radius: 6px;}
+      .dashboard__card-content {width: calc(80% - 1rem / 2);}
+      .dashboard__card-icon{width: calc(20% - 1rem / 2);}
+      .dashboard__card-icon svg{width: 30px;height: 30px;fill: var(--color-secondary);}
+      .dashboard__card-content-title{font-size: var(--font-size-small);color: var(--color-secondary);margin-bottom: .3rem;}
+      .dashboard-content-card p{font-size: var(--h4-font-size);color: var(--color-primary);font-weight: 600;}
+      .dashboard-content__graph{width: 100%!important;height: auto!important;margin-bottom: 2rem;}
+      .dashboard-content__card-title{font-size: var(--h6-font-size);font-weight: 700;margin-bottom: 2rem;color: var(--color-primary);padding-left: 1rem;}
+      .dashboard-content__graph-data {display: flex;gap: 2rem;flex-wrap: wrap;}
+      .dashboard-content__table-img {display: flex;align-items: center;gap: 1rem;}    
+      .dashboard-content__table-img img{width: 45px;height: 45px;border-radius: 50%;}
+      .dashboard-content__table tr th{border-bottom: 1px solid #dedede;text-align: start;}
+      .dashboard-content__table td,th{padding: 1.5rem;}
+      .dashboard-content__table th{color:#607080;}
+      .table__content{margin-left: 1rem;color: #607080;font-weight: 700;}
+      .table__content-description{color: #607080;}
+      .dashboard__sider-img{width: 50px;height: 50px;border-radius: 50%;}
+      .dashboard__sider-card {display: flex;gap: 2rem;align-items: center;padding: 1rem;margin-bottom: 1rem;background: var(--color-accent);border-radius: 6px;box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .12);}
+      .dashboard-content__graph-table,.dashboard-content__graph-feature{width: 100%;}
+      @media(min-width:768px){
+        .dashboard-content-card{width: calc(50% - 4rem / 4);}
+        .dashboard-content__graph-feature {width: calc(33.33% - 2rem / 2);}
+        .dashboard-content__graph-table {width: calc(66.66% - 2rem / 2);}
+      }
+      @media(min-width:992px){
+      .dashboard-card__item{display: flex;gap: 2rem;}
+      .dashboard-sidebar.hide{width: 5%;}
+      .dashboard-sidebar.hide + .dashboard-content{width: calc(100% - 5%);}
+      .dashboard-content__left-card{width: calc(75% - 2rem/2);}
+      .dashboard__right-card{width: calc(25% - 2rem/2);display: flex;flex-direction: column;}
+      .dashboard-content-card{width: calc(25% - 6rem / 4);}
+      }
+  </style>
+</head>
+<body>
+  <section class="dashboard">
+      <div class="dashboard-main">
+      <aside class="dashboard-sidebar hide">
+        <a href="#" class="menu menubar"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M4 6H20M4 12H20M4 18H20" stroke="#7c8db5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg></a>
+        <div class="dashboard-sidebar__menu">
+          <a href="#" class="menu close"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M14.5 9.50002L9.5 14.5M9.49998 9.5L14.5 14.5" stroke="#7c8db5" stroke-width="1.5" stroke-linecap="round"></path> <path d="M7 3.33782C8.47087 2.48697 10.1786 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 10.1786 2.48697 8.47087 3.33782 7" stroke="#7c8db5" stroke-width="1.5" stroke-linecap="round"></path> </g></svg></a> 
+        <div class="sidebar-header">
+              <img src="images/blueoshan-logo.svg" class="sidebar-header__logo" alt="logo">
+          </div>
+          <div class="sidebar-header__menu">
+              <ul class="sidebar-header__menu-items">
+                  <li class="sidebar-menu--head">Menu</li>
+                  <li class="sidebar-menu__item">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-grid-fill" viewBox="0 0 16 16">
+                        <path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5zm8 0A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5zm-8 8A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5zm8 0A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5z"/>
+                      </svg>
+                      <a href="#" class="sidebar-menu__item-link">
+                      DashBoard</a>
+                  </li>
+                  <li class="sidebar-menu__item">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-stack" viewBox="0 0 16 16">
+                          <path d="m14.12 10.163 1.715.858c.22.11.22.424 0 .534L8.267 15.34a.6.6 0 0 1-.534 0L.165 11.555a.299.299 0 0 1 0-.534l1.716-.858 5.317 2.659c.505.252 1.1.252 1.604 0l5.317-2.66zM7.733.063a.6.6 0 0 1 .534 0l7.568 3.784a.3.3 0 0 1 0 .535L8.267 8.165a.6.6 0 0 1-.534 0L.165 4.382a.299.299 0 0 1 0-.535z"/>
+                          <path d="m14.12 6.576 1.715.858c.22.11.22.424 0 .534l-7.568 3.784a.6.6 0 0 1-.534 0L.165 7.968a.299.299 0 0 1 0-.534l1.716-.858 5.317 2.659c.505.252 1.1.252 1.604 0z"/>
+                        </svg>
+                      <a href="#" class="sidebar-menu__item-link">
+                        Employees</a>
+                  </li>
+                  <li class="sidebar-menu__item">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-collection-fill" viewBox="0 0 16 16">
+                          <path d="M0 13a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 16 13V6a1.5 1.5 0 0 0-1.5-1.5h-13A1.5 1.5 0 0 0 0 6zM2 3a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 0-1h-11A.5.5 0 0 0 2 3m2-2a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 0-1h-7A.5.5 0 0 0 4 1"/>
+                        </svg>
+                    <a href="#" class="sidebar-menu__item-link">
+                      Leave Management</a>
+                  </li>
+                  <li class="sidebar-menu__item">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-grid-1x2-fill" viewBox="0 0 16 16">
+                          <path d="M0 1a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1zm9 0a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1zm0 9a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1z"/>
+                        </svg>
+                      <a href="#" class="sidebar-menu__item-link">
+                        Attendance</a>
+                      </li>
+                  <li class="sidebar-menu--head">Leave Management</li>
+                  <li class="sidebar-menu__item">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-grid-1x2-fill" viewBox="0 0 16 16">
+                  <path d="M0 1a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1zm9 0a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1zm0 9a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1z"/>
+                </svg>
+                      <a href="#" class="sidebar-menu__item-link">
+                        Payroll</a></li>
+                  <li class="sidebar-menu__item">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-spreadsheet" viewBox="0 0 16 16">
+                  <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V9H3V2a1 1 0 0 1 1-1h5.5zM3 12v-2h2v2zm0 1h2v2H4a1 1 0 0 1-1-1zm3 2v-2h3v2zm4 0v-2h3v1a1 1 0 0 1-1 1zm3-3h-3v-2h3zm-7 0v-2h3v2z"/>
+                </svg>
+                      <a href="#" class="sidebar-menu__item-link">
+                        Holidays</a></li>
+                  <li class="sidebar-menu__item">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen-fill" viewBox="0 0 16 16">
+                      <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001"/>
+                    </svg>
+                      <a href="#" class="sidebar-menu__item-link">
+                    Employee details</a></li>
+                  <li class="sidebar-menu__item">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-medical" viewBox="0 0 16 16">
+                      <path d="M7.5 5.5a.5.5 0 0 0-1 0v.634l-.549-.317a.5.5 0 1 0-.5.866L6 7l-.549.317a.5.5 0 1 0 .5.866l.549-.317V8.5a.5.5 0 1 0 1 0v-.634l.549.317a.5.5 0 1 0 .5-.866L8 7l.549-.317a.5.5 0 1 0-.5-.866l-.549.317zm-2 4.5a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1z"/>
+                      <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
+                    </svg>
+                      <a href="#" class="sidebar-menu__item-link">
+                    Reports</a></li>
+              </ul>
+          </div>
+        </div>
+      </aside>
+      <div class="dashboard-content">
+          <h3 class="dashboard-content__title">Profile Statistics</h3>
+          <div class="dashboard-card__item">
+              <div class="dashboard-content__left-card">
+                <div class="dashboard-content-cards">
+                  <div class="dashboard-content-card">
+                    <div class="dashboard__card-icon">
+                      <svg fill="#7c8db5" height="200px" width="200px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 297.001 297.001" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <g> <path d="M66.415,140.315c15.028,0,29.778-20.826,29.778-42.044c0-18.089-11.689-29.777-29.778-29.777 S36.638,80.182,36.638,98.271C36.638,119.489,51.387,140.315,66.415,140.315z"></path> <path d="M230.587,140.315c15.028,0,29.777-20.826,29.777-42.044c0-18.089-11.688-29.777-29.777-29.777 s-29.778,11.688-29.778,29.777C200.809,119.489,215.559,140.315,230.587,140.315z"></path> <path d="M56.127,152.637c-0.409,4.652-1.761,10.138-5.382,14.589c0.158,6.338,4.097,11.753,9.641,14.072 c5.826-6.226,13.093-11.276,21.303-14.616c-3.306-4.351-4.591-9.577-4.984-14.045c-3.279,1.107-6.717,1.725-10.289,1.725 C62.843,154.362,59.406,153.743,56.127,152.637z"></path> <path d="M220.298,152.637c-0.392,4.467-1.677,9.694-4.984,14.045c8.21,3.34,15.477,8.39,21.303,14.616 c5.544-2.319,9.483-7.734,9.641-14.072c-3.621-4.451-4.974-9.937-5.382-14.589c-3.279,1.107-6.717,1.725-10.289,1.725 C227.015,154.362,223.577,153.743,220.298,152.637z"></path> <path d="M296.931,228.779c-1.524-12.634-2.786-22.358-3.65-28.123c-1.674-11.164-10.851-20.678-22.836-23.674l-11.066-2.766 c-2.051,7.988-7.357,14.667-14.405,18.583c2.95,5.382,4.983,11.23,5.899,17.339c0.981,6.55,2.276,16.323,3.858,29.116h32.912 c2.714,0,5.201-1.118,7.001-3.148C296.444,234.075,297.255,231.473,296.931,228.779z"></path> <path d="M37.622,174.216l-11.066,2.766c-11.985,2.996-21.162,12.511-22.836,23.675c-0.864,5.764-2.126,15.488-3.65,28.121 c-0.324,2.695,0.487,5.296,2.287,7.326c1.8,2.03,4.287,3.148,7.001,3.148h32.913c1.581-12.793,2.876-22.565,3.857-29.116 c0.916-6.109,2.949-11.957,5.899-17.339C44.98,188.883,39.673,182.203,37.622,174.216z"></path> <path d="M236.981,212.221c-2.447-16.325-15.802-30.221-33.232-34.578l-17.766-4.442c-3.277,17.716-18.832,31.179-37.482,31.179 c-18.65,0-34.205-13.464-37.482-31.179l-17.765,4.442C75.823,182,62.467,195.895,60.021,212.221 c-1.202,8.015-2.888,21.005-5.012,38.609c-0.535,4.441,0.803,8.729,3.771,12.075s7.065,5.189,11.539,5.189h156.366 c4.474,0,8.572-1.843,11.539-5.189c2.967-3.346,4.305-7.634,3.77-12.076C239.869,233.226,238.184,220.236,236.981,212.221z"></path> <path d="M148.501,132.522c24.444,0,43.404-32.368,43.404-60.212c0-26.367-17.037-43.404-43.404-43.404 s-43.404,17.037-43.404,43.404C105.097,100.154,124.057,132.522,148.501,132.522z"></path> <path d="M131.959,143.139c-0.159,6.77-1.643,15.925-7.539,22.706c0,13.278,10.803,24.488,24.081,24.488 s24.081-11.21,24.081-24.488c-5.896-6.781-7.38-15.936-7.539-22.706c-5.196,2.204-10.739,3.43-16.542,3.43 S137.155,145.343,131.959,143.139z"></path> </g> </g> </g> </g></svg>
+                    </div>
+                    <div class="dashboard__card-content">
+                      <h6 class="dashboard__card-content-title">No of Employees</h6 class="dashboard__card-content-title">
+                      <p>112.000</p>
+                    </div>
+                  </div>
+                  <div class="dashboard-content-card">
+                    <div class="dashboard__card-icon">
+                      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g clip-path="url(#clip0_429_10973)"> <path d="M3 17L9 11L13 15L21 7" stroke="#7c8db5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M17 7H21V11" stroke="#7c8db5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path> </g> <defs> <clipPath id="clip0_429_10973"> <rect width="24" height="24" fill="white"></rect> </clipPath> </defs> </g></svg>
+                    </div>
+                    <div class="dashboard__card-content">
+                      <h6 class="dashboard__card-content-title">Followers</h6 class="dashboard__card-content-title">
+                      <p>183.000</p>
+                    </div>
+                  </div>
+                  <div class="dashboard-content-card">
+                    <div class="dashboard__card-icon">
+                    <svg viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>telegram_line</title> <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <g id="Brand" transform="translate(-672.000000, -0.000000)"> <g id="telegram_line" transform="translate(672.000000, 0.000000)"> <path d="M24,0 L24,24 L0,24 L0,0 L24,0 Z M12.5934901,23.257841 L12.5819402,23.2595131 L12.5108777,23.2950439 L12.4918791,23.2987469 L12.4918791,23.2987469 L12.4767152,23.2950439 L12.4056548,23.2595131 C12.3958229,23.2563662 12.3870493,23.2590235 12.3821421,23.2649074 L12.3780323,23.275831 L12.360941,23.7031097 L12.3658947,23.7234994 L12.3769048,23.7357139 L12.4804777,23.8096931 L12.4953491,23.8136134 L12.4953491,23.8136134 L12.5071152,23.8096931 L12.6106902,23.7357139 L12.6232938,23.7196733 L12.6232938,23.7196733 L12.6266527,23.7031097 L12.609561,23.275831 C12.6075724,23.2657013 12.6010112,23.2592993 12.5934901,23.257841 L12.5934901,23.257841 Z M12.8583906,23.1452862 L12.8445485,23.1473072 L12.6598443,23.2396597 L12.6498822,23.2499052 L12.6498822,23.2499052 L12.6471943,23.2611114 L12.6650943,23.6906389 L12.6699349,23.7034178 L12.6699349,23.7034178 L12.678386,23.7104931 L12.8793402,23.8032389 C12.8914285,23.8068999 12.9022333,23.8029875 12.9078286,23.7952264 L12.9118235,23.7811639 L12.8776777,23.1665331 C12.8752882,23.1545897 12.8674102,23.1470016 12.8583906,23.1452862 L12.8583906,23.1452862 Z M12.1430473,23.1473072 C12.1332178,23.1423925 12.1221763,23.1452606 12.1156365,23.1525954 L12.1099173,23.1665331 L12.0757714,23.7811639 C12.0751323,23.7926639 12.0828099,23.8018602 12.0926481,23.8045676 L12.108256,23.8032389 L12.3092106,23.7104931 L12.3186497,23.7024347 L12.3186497,23.7024347 L12.3225043,23.6906389 L12.340401,23.2611114 L12.337245,23.2485176 L12.337245,23.2485176 L12.3277531,23.2396597 L12.1430473,23.1473072 Z" id="MingCute" fill-rule="nonzero"> </path> <path d="M21.8394,6.05639 C22.0315,4.8917 20.8652,3.97177 19.7773,4.42984 L2.67703,11.63 C1.48461,12.132 1.42351,13.8558 2.67788,14.3758 C3.60596,14.7605 5.02633,15.3246 6.45085,15.7943 C7.61932,16.1795 8.8931,16.5371 9.91353,16.6383 C10.1929,16.9725 10.5445,17.2935 10.9017,17.5872 C11.4487,18.0371 12.1074,18.5012 12.7873,18.9455 C14.1489,19.8352 15.6597,20.6865 16.678,21.2396 C17.8949,21.9006 19.3517,21.1395 19.5705,19.8131 L21.8394,6.05639 Z M4.59485,12.9925 L19.7186,6.62459 L17.6009,19.4649 C16.6024,18.9219 15.163,18.1087 13.8813,17.2713 C13.2329,16.8475 12.6407,16.4279 12.172,16.0425 C12.0051,15.9052 11.8638,15.7802 11.7461,15.6683 L15.7072,11.7071 C16.0977,11.3166 16.0977,10.6834 15.7072,10.2929 C15.3167,9.90237 14.6835,9.90237 14.293,10.2929 L9.95476,14.6311 C9.22132,14.5373 8.19888,14.2647 7.07709,13.8949 C6.21377,13.6102 5.34574,13.2869 4.59485,12.9925 Z" id="形状" fill="#7c8db5"> </path> </g> </g> </g> </g></svg>
+                    </div>
+                    <div class="dashboard__card-content">
+                      <h6 class="dashboard__card-content-title">Following</h6 class="dashboard__card-content-title">
+                      <p>80.000</p>
+                    </div>
+                  </div>
+                  <div class="dashboard-content-card">
+                    <div class="dashboard__card-icon">
+                      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M15.0309 3.30271C13.0299 2.8991 10.9701 2.8991 8.96913 3.30271C6.66186 3.76809 5 5.82231 5 8.20894V18.6292C5 20.4579 6.9567 21.596 8.51221 20.6721L11.3451 18.9895C11.7496 18.7492 12.2504 18.7492 12.6549 18.9895L15.4878 20.6721C17.0433 21.596 19 20.4579 19 18.6292V8.20894C19 5.82231 17.3381 3.76809 15.0309 3.30271Z" fill="#7c8db5"></path> </g></svg>
+                    </div>
+                    <div class="dashboard__card-content">
+                      <h6 class="dashboard__card-content-title">Saved Post</h6 class="dashboard__card-content-title">
+                      <p>112</p>
+                    </div>
+                  </div>
+                </div>
+                <h4 class="dashboard-content__card-title">Profile Visit</h4>
+                <canvas id="graph" class="dashboard-content__graph"></canvas>
+                <div class="dashboard-content__graph-data">
+                  <div class="dashboard-content__graph-feature">
+                    <h4 class="dashboard-content__card-title">Profile Visit</h4>
+                    <img src="images/graph.png" alt="graph" class="dashboard-feature">
+                  </div>
+                  <div class="dashboard-content__graph-table">
+                    <h4 class="dashboard-content__card-title">Notice Board</h4>
+                    <table class="dashboard-content__table">
+                      <thead>
+                          <tr>
+                              <th>Name</th>
+                              <th>Comment</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr>
+                              <td>
+                                  <div class="dashboard-content__table-img">
+                                      <img src="images/tableimg.jpg">
+                                      <p class="dashboard-content__table-title">Si Cantik</p>
+                                  </div>
+                              </td>
+                              <td>
+                                  <p class="table__content-description">Congratulations on your graduation!</p>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td>
+                                <div class="dashboard-content__table-img">
+                                  <img src="images/tableimg1.jpg">
+                                  <p class="dashboard-content__table-title">Si Cantik</p>
+                              </div>
+                              </td>
+                              <td>
+                                  <p class="table__content-description">Wow amazing design! Can you make another
+                                      tutorial for
+                                      this design?</p>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td>
+                                <div class="dashboard-content__table-img">
+                                  <img src="images/tableimg.jpg">
+                                  <p class="dashboard-content__table-title">Si Cantik</p>
+                              </div>
+                              </td>
+                              <td>
+                                  <p class="table__content-description">Wow amazing design! Can you make another
+                                      tutorial for
+                                      this design?</p>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td>
+                                <div class="dashboard-content__table-img">
+                                  <img src="images/tableimg1.jpg">
+                                  <p class="dashboard-content__table-title">Si Cantik</p>
+                              </div>
+                              </td>
+                              <td>
+                                  <p class="table__content-description">Wow amazing design! Can you make another
+                                      tutorial for
+                                      this design?</p>
+                              </td>
+                          </tr>
+                      </tbody>
+                  </table>
+                  </div>
+                </div>
+              </div>
+            <div class="dashboard__right-card">
+                  <div class="dashboard__sider-card">
+                    <img src="images/tableimg2.jpg" alt="person-img" class="dashboard__sider-img">
+                    <div class="dashboard__sider-content">
+                    <h6>Hank Schrader</h6>
+                    <p>@johnducky</p>
+                    </div>
+                  </div>
+                  <h4 class="dashboard-content__card-title">Recent Messages</h4>
+                  <div class="dashboard__sider-card">
+                    <img src="images/tableimg3.jpg" alt="person-img" class="dashboard__sider-img">
+                    <div class="dashboard__sider-content">
+                      <h6>Hank Schrader</h6>
+                      <p>@johnducky</p>
+                    </div>
+                  </div>
+                  <div class="dashboard__sider-card">
+                    <img src="images/tableimg2.jpg" alt="person-img" class="dashboard__sider-img">
+                    <div class="dashboard__sider-content">
+                      <h6>Hank Schrader</h6>
+                      <p>@johnducky</p>
+                    </div>
+                  </div>
+                  <div class="dashboard__sider-card">
+                    <img src="images/tableimg.jpg" alt="person-img" class="dashboard__sider-img">
+                    <div class="dashboard__sider-content">
+                      <h6>Hank Schrader</h6>
+                      <p>@johnducky</p>
+                    </div>
+                  </div>
+                  <div class="dashboard__sider-card">
+                    <img src="images/tableimg2.jpg" alt="person-img" class="dashboard__sider-img">
+                    <div class="dashboard__sider-content">
+                      <h6>Hank Schrader</h6>
+                      <p>@johnducky</p>
+                    </div>
+                  </div>
+                  <div class="dashboard__sider-card">
+                    <img src="images/tableimg.jpg" alt="person-img" class="dashboard__sider-img">
+                    <div class="dashboard__sider-content">
+                      <h6>Hank Schrader</h6>
+                      <p>@johnducky</p>
+                    </div>
+                  </div>  
+            </div>
+          </div>
+      </div>
+  </div>
+  </section>
+<script>
+document.addEventListener("DOMContentLoaded",function(){
+  const sideBar = document.querySelector(".dashboard-sidebar");
+  const menu = document.querySelector(".menu");
+  const close = document.querySelector(".close")
+  menu.addEventListener("click",function(){
+    sideBar.classList.toggle("hide");
+  });
+  close.addEventListener("click",function(){
+    sideBar.classList.add("hide");
+  });
+});
+
+</script>
+  <script>
+    const attendanceData = {
+        labels: ['jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun','jul','Aug','Sep','Oct','Nov','Dec'],
+        datasets: [{
+            label: 'sales statistics',
+            data: [9,20,30,20,10,20,30,20,10,20,30,20],
+            backgroundColor: 'rgb(67, 94, 190)', 
+            borderColor: 'rgba(54, 162, 235, 1)', 
+            borderWidth: 1
+        }]
+    };
+    const ctx = document.getElementById('graph').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: attendanceData,
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 32,
+                    title: {
+                        display: true,
+                        // text: 'Attendance Percentage'
+                    }, grid: {
+                        display: true 
+                  }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        // text: 'Months'
+                    },
+                    grid: {
+                        display: false 
+                    }
+                }
+            }
+        }
+    });
+</script>
+</body>
+</html>
