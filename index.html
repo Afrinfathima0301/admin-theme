@@ -10,17 +10,17 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="stylesheet" href="style.css">
   <style>
-      .admin{display: grid;grid-template-columns: 280px 1fr;height: 100dvh;}
-      .admin-sidebar{background: var(--color-accent);height: 100dvh;overflow-y: auto;}
-      .admin-sidebar .menubar{display: none;}
-      .admin-main {padding: 2rem;height: 100dvh;overflow-y: auto;}
+      .admin{display: grid;grid-template-columns: 1fr;grid-template-areas: "navbar navbar" "sidebar main" "sidebar footer";min-height: 100vh;}
+      .admin-sidebar{background: var(--color-accent);height: 100dvh;overflow-y: auto;position: fixed;align-self: start;top: 78px;height: calc(100vh - 78px);grid-area: sidebar;}
+      .menubar{display: none;}
+      .admin-main {padding: 1rem;position: absolute;z-index: -1;grid-area: main;height: calc(100vh - 79px);align-self: self-end;}
       .dashboard-content__title {font-size: var(--h4-font-size);margin-bottom: 2rem;}
-      .admin-sidebar .menubar{display: none;}
-      .menubar{display: inline-block; position: absolute; right: 30px; top: 10px;}
       .admin:has(.admin-sidebar.hide){ grid-template-columns: 0px 1fr;}
-      .sidebar-header{padding: 1rem;position: sticky;top: 0;background-color: var(--color-white);box-shadow: var(--box-shadow-primary);}
-      .admin-sidebar .close{display: none;display: inline-block;position: absolute;top: 10px;right: 30px;}
+      .admin:has(.admin-sidebar.hide) .menubar { display: inline-block; }
+      .sidebar-header{grid-area: navbar;padding: 1rem;position: fixed;top: 0;width: 100%;background-color: var(--color-white);box-shadow: var(--box-shadow-primary);display: flex;align-items: center;justify-content: space-between;}
+      .admin-sidebar .close{display: none;display: inline-block;position: absolute;top: 10px;right: 15px;}
       .sidebar-header__menu { padding: 1rem; }
+      .admin-sidebar.hide{position: unset;}
       .admin-sidebar.hide .close{display: none;}
       .menu svg{width: 30px;height: 30px;}
       .sidebar-header__logo{width: 150px;}
@@ -32,7 +32,7 @@
       .sidebar-menu__item:hover .sidebar-menu__item-link{color: var(--color-white);}
       .sidebar-menu__item:hover svg{fill: var(--color-white);}
       .dashboard-content-cards {display: flex;gap: 2rem;margin-bottom: 2rem;flex-wrap: wrap;}
-      .dashboard-content-card {background-color: var(--color-accent);box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .12);padding: 1rem;width: 100%;display: flex;gap: 1rem;align-items: center;flex-wrap: wrap;border-radius: 6px;}
+      .dashboard-content-card {background-color: var(--color-accent);box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .12);padding: 1rem;width: calc(100% - 1rem/4);display: flex;gap: 1rem;align-items: center;flex-wrap: wrap;border-radius: 6px;}
       .dashboard__card-content {width: calc(80% - 1rem / 2);}
       .dashboard__card-icon{width: calc(20% - 1rem / 2);}
       .dashboard__card-icon svg{width: 30px;height: 30px;fill: var(--color-secondary);}
@@ -62,19 +62,23 @@
         .dashboard-content__graph-table {width: calc(66.66% - 2rem / 2);}
       }
       @media(min-width:992px){
+      .admin{grid-template-columns: 280px 1fr; grid-template-rows: auto 1fr auto;}
       .dashboard-card__item{display: flex;gap: 2rem;}
+      .admin-main{position: unset;padding: 2rem;}
       .dashboard-content__left-card{width: calc(75% - 2rem/2);}
       .dashboard__right-card{width: calc(25% - 2rem/2);display: flex;flex-direction: column;}
-      .dashboard-content-card{width: calc(25% - 6rem / 4);}
+      }
+      @media(min-width:1200px){
+        .dashboard-content-card{width: calc(25% - 6rem / 4);}
       }
   </style>
 </head>
 <body>
-  <div class="sidebar-header">
-    <img src="images/blueoshan-logo.svg" class="sidebar-header__logo" alt="logo">
-    <a href="#" class="menu menubar"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M4 6H20M4 12H20M4 18H20" stroke="#7c8db5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg></a>
-</div>
-      <div class="admin">
+  <div class="admin">
+        <nav class="sidebar-header">
+          <img src="images/blueoshan-logo.svg" class="sidebar-header__logo" alt="logo">
+          <a href="#" class="menu menubar"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M4 6H20M4 12H20M4 18H20" stroke="#7c8db5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg></a>
+      </nav>
       <aside class="admin-sidebar">
         <div class="admin-sidebar__menu">
           <a href="#" class="menu close"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M14.5 9.50002L9.5 14.5M9.49998 9.5L14.5 14.5" stroke="#7c8db5" stroke-width="1.5" stroke-linecap="round"></path> <path d="M7 3.33782C8.47087 2.48697 10.1786 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 10.1786 2.48697 8.47087 3.33782 7" stroke="#7c8db5" stroke-width="1.5" stroke-linecap="round"></path> </g></svg></a> 
@@ -82,6 +86,7 @@
               <ul class="sidebar-header__menu-items">
                   <li class="sidebar-menu--head">Menu</li>
                   <li class="sidebar-menu__item">
+                    <a href="#">
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-grid-fill" viewBox="0 0 16 16">
                         <path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5zm8 0A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5zm-8 8A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5zm8 0A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5z"/>
                       </svg>
