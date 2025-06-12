@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="style.css">
   <style>
       .admin{display: grid;grid-template-columns: 1fr;grid-template-areas: "navbar navbar" "sidebar main" "sidebar footer";min-height: 100vh;}
-      .admin-sidebar{background: var(--color-accent);height: 100dvh;overflow-y: auto;position: fixed;align-self: start;top: 78px;height: calc(100vh - 78px);grid-area: sidebar;}
+      .admin-sidebar{background: var(--color-accent);height: 100dvh;overflow-y: auto;position: fixed;align-self: start;top: 58px;height: calc(100vh - 58px);grid-area: sidebar;}
       .menubar{display: none;}
       .admin-main {padding: 1rem;position: absolute;z-index: -1;grid-area: main;height: calc(100vh - 79px);align-self: self-end;}
       .dashboard-content__title {font-size: var(--h4-font-size);margin-bottom: 2rem;}
@@ -23,7 +23,7 @@
       .admin-sidebar.hide{position: unset;}
       .admin-sidebar.hide .close{display: none;}
       .menu svg{width: 30px;height: 30px;}
-      .sidebar-header__logo{width: 150px;}
+      .sidebar-header__logo{font-size: 32px;display: inline-block;}
       .sidebar-menu__item-link{font-size: var(--font-size-default);font-weight: 600;color: var(--color-primary);display: inline-block;transition: .3s ease;display: flex;align-items: center;gap: 18px;padding: 1rem;}
       .sidebar-menu--head{padding: 1rem;font-size: var(--font-size-default);font-weight: 600;color: var(--font-color-dark);}
       .sidebar-menu__item svg{fill: var(--color-secondary);width: 22px;height: 22px;}
